@@ -2,6 +2,7 @@ package com.smartcampus.resource;
 
 import com.smartcampus.model.Room;
 
+import com.smartcampus.storage.DataStore;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -17,11 +18,7 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Room> getRooms() {
 
-        List<Room> rooms = new ArrayList<>();
+        return new ArrayList<>(DataStore.rooms.values());
 
-        rooms.add(new Room("LIB-301", "Library Study Room", 40));
-        rooms.add(new Room("LAB-201", "Computer Lab", 30));
-
-        return rooms;
     }
 }
