@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.DELETE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +48,18 @@ public class RoomResource {
         }
 
         return Response.ok(room).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteRoom(@PathParam("id") String id) {
+
+        if (!DataStore.rooms.containsKey(id)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        DataStore.rooms.remove(id);
+
+        return Response.ok().build();
     }
 }
