@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Provider
-public class RoomNotEmptyExceptionMapper implements ExceptionMapper<RoomNotEmptyException> {
+public class LinkedResourceNotFoundExceptionMapper implements ExceptionMapper<LinkedResourceNotFoundException> {
 
     @Override
-    public Response toResponse(RoomNotEmptyException exception) {
+    public Response toResponse(LinkedResourceNotFoundException exception) {
 
         Map<String, String> error = new HashMap<>();
         error.put("error", exception.getMessage());
 
-        return Response.status(Response.Status.CONFLICT)
+        return Response.status(422)
                 .entity(error)
                 .build();
     }

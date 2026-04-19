@@ -11,6 +11,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.QueryParam;
+import com.smartcampus.exception.LinkedResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,11 @@ public class SensorResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createSensor(Sensor sensor) {
+
+        // check if the room exists
+        if (!DataStore.rooms.containsKey(sensor.getRoomId())) {
+            throw new LinkedResourceNotFoundException("Room does not exist for sensor.");
+        }
 
         DataStore.sensors.put(sensor.getId(), sensor);
 

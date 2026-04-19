@@ -2,6 +2,7 @@ package com.smartcampus.resource;
 
 import com.smartcampus.model.Room;
 
+import com.smartcampus.model.Sensor;
 import com.smartcampus.storage.DataStore;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -11,9 +12,8 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.DELETE;
-
+import com.smartcampus.exception.RoomNotEmptyException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +56,13 @@ public class RoomResource {
 
         if (!DataStore.rooms.containsKey(id)) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        // check if any sensor belongs to this room
+        for (Sensor sensor : DataStore.sensors.values()) {
+            if (sensor.getRoomId().equals(id)) {
+                throw new RoomNotEmptyException("Room cannot be deleted because it contains sensors.");
+            }
         }
 
         DataStore.rooms.remove(id);
