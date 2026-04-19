@@ -12,6 +12,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Produces;
 import java.util.Collections;
+import com.smartcampus.exception.SensorUnavailableException;
+import com.smartcampus.model.Sensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +25,26 @@ public class SensorReadingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addReading(@PathParam("id") String sensorId, SensorReading reading) {
 
+        Sensor sensor = DataStore.sensors.get(sensorId);
+
+        // check if sensor exists
+        if (sensor == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        // maintenance rule
+        if ("MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
+            throw new SensorUnavailableException("Sensor is under maintenance.");
+        }
+
         List<SensorReading> sensorReadings =
                 DataStore.readings.getOrDefault(sensorId, new ArrayList<>());
 
         sensorReadings.add(reading);
-
         DataStore.readings.put(sensorId, sensorReadings);
 
-        // update sensor current value
-        if (DataStore.sensors.containsKey(sensorId)) {
-            DataStore.sensors.get(sensorId).setCurrentValue(reading.getValue());
-        }
+        // update current value
+        sensor.setCurrentValue(reading.getValue());
 
         return Response.status(Response.Status.CREATED).entity(reading).build();
     }
