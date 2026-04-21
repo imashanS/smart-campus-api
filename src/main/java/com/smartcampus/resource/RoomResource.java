@@ -16,6 +16,8 @@ import jakarta.ws.rs.DELETE;
 import com.smartcampus.exception.RoomNotEmptyException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/rooms")
 public class RoomResource {
@@ -29,10 +31,9 @@ public class RoomResource {
     }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createRoom(Room room) {
-
         DataStore.rooms.put(room.getId(), room);
-
         return Response.status(Response.Status.CREATED).entity(room).build();
     }
 
@@ -52,6 +53,7 @@ public class RoomResource {
 
     @DELETE
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteRoom(@PathParam("id") String id) {
 
         if (!DataStore.rooms.containsKey(id)) {
@@ -60,13 +62,17 @@ public class RoomResource {
 
         // check if any sensor belongs to this room
         for (Sensor sensor : DataStore.sensors.values()) {
-            if (sensor.getRoomId().equals(id)) {
-                throw new RoomNotEmptyException("Room cannot be deleted because it contains sensors.");
+            if (id.equals(sensor.getRoomId())) {
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "Room cannot be deleted because it contains sensors.");
+                return Response.status(409)
+                        .entity(error)
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
             }
         }
 
         DataStore.rooms.remove(id);
-
         return Response.ok().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.smartcampus.exception;
 
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -18,6 +19,7 @@ public class LinkedResourceNotFoundExceptionMapper implements ExceptionMapper<Li
 
         return Response.status(422)
                 .entity(error)
+                .type(MediaType.APPLICATION_JSON)
                 .build();
     }
 }
