@@ -21,39 +21,24 @@ public class SensorResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Sensor> getSensors() {
-
-        return new ArrayList<>(DataStore.sensors.values());
-
+    public List<Sensor> getSensors(@QueryParam("type") String type) {
+        List<Sensor> result = new ArrayList<>();
+        for (Sensor sensor : DataStore.sensors.values()) {
+            if (type == null || sensor.getType().equalsIgnoreCase(type)) {
+                result.add(sensor);
+            }
+        }
+        return result;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createSensor(Sensor sensor) {
-
-        // check if the room exists
         if (!DataStore.rooms.containsKey(sensor.getRoomId())) {
             throw new LinkedResourceNotFoundException("Room does not exist for sensor.");
         }
-
         DataStore.sensors.put(sensor.getId(), sensor);
-
         return Response.status(Response.Status.CREATED).entity(sensor).build();
-    }
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Sensor> getSensors(@QueryParam("type") String type) {
-
-        List<Sensor> result = new ArrayList<>();
-
-        for (Sensor sensor : DataStore.sensors.values()) {
-
-            if (type == null || sensor.getType().equalsIgnoreCase(type)) {
-                result.add(sensor);
-            }
-
-        }
-
-        return result;
     }
 }
