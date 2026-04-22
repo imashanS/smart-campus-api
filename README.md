@@ -34,7 +34,7 @@ Copy the WAR file to: tomcat/webapps/
 
 6. Access the API at
 ```
-http://localhost:8080/smart-campus-api/api/v1
+http://localhost:8080/smart_campus_api_war_exploded/api/v1
 ```
 
 ---
