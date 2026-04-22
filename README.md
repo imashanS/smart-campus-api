@@ -17,7 +17,7 @@ The system is deployed as a WAR file on Apache Tomcat.
 
 2. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/imashanS/smart-campus-api.git
 ```
 
 3. Build the project using Maven
@@ -43,7 +43,7 @@ http://localhost:8080/smart-campus-api/api/v1
 
 **Create a room**
 ```bash
-curl -X POST http://localhost:8080/smart-campus-api/api/v1/rooms \
+curl -X POST http://localhost:8080/smart_campus_api_war_exploded/api/v1/rooms \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"id":"LIB-301","name":"Library Study Room","capacity":40}'
@@ -52,12 +52,12 @@ curl -X POST http://localhost:8080/smart-campus-api/api/v1/rooms \
 **Get all rooms**
 ```bash
 curl -H "Accept: application/json" \
-  http://localhost:8080/smart-campus-api/api/v1/rooms
+  http://localhost:8080/smart_campus_api_war_exploded/api/v1/rooms
 ```
 
 **Create a sensor**
 ```bash
-curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors \
+curl -X POST http://localhost:8080/smart_campus_api_war_exploded/api/v1/sensors \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"id":"TEMP-001","type":"Temperature","status":"ACTIVE","currentValue":0,"roomId":"LIB-301"}'
@@ -66,12 +66,12 @@ curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors \
 **Filter sensors by type**
 ```bash
 curl -H "Accept: application/json" \
-  http://localhost:8080/smart-campus-api/api/v1/sensors?type=Temperature
+  "http://localhost:8080/smart_campus_api_war_exploded/api/v1/sensors?type=Temperature"
 ```
 
 **Add a sensor reading**
 ```bash
-curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors/TEMP-001/readings \
+curl -X POST http://localhost:8080/smart_campus_api_war_exploded/api/v1/sensors/TEMP-001/readings \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"id":"R001","timestamp":1713510000000,"value":24.6}'
@@ -80,12 +80,12 @@ curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors/TEMP-001/read
 **Get sensor readings**
 ```bash
 curl -H "Accept: application/json" \
-  http://localhost:8080/smart-campus-api/api/v1/sensors/TEMP-001/readings
+  http://localhost:8080/smart_campus_api_war_exploded/api/v1/sensors/TEMP-001/readings
 ```
 
 **Test 422 error - invalid roomId**
 ```bash
-curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors \
+curl -X POST http://localhost:8080/smart_campus_api_war_exploded/api/v1/sensors \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"id":"TEMP-999","type":"CO2","status":"ACTIVE","currentValue":0,"roomId":"FAKE-ROOM"}'
