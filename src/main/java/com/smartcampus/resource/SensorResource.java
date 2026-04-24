@@ -32,7 +32,10 @@ public class SensorResource {
             throw new LinkedResourceNotFoundException("Room does not exist for sensor.");
         }
         DataStore.sensors.put(sensor.getId(), sensor);
-        return Response.status(Response.Status.CREATED).entity(sensor).build();
+        return Response.status(Response.Status.CREATED)
+                .entity(sensor)
+                .header("Location", "/api/v1/sensors/" + sensor.getId())
+                .build();
     }
 
     @GET

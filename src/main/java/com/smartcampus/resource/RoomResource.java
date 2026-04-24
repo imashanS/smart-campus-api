@@ -34,7 +34,10 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createRoom(Room room) {
         DataStore.rooms.put(room.getId(), room);
-        return Response.status(Response.Status.CREATED).entity(room).build();
+        return Response.status(Response.Status.CREATED)
+                .entity(room)
+                .header("Location", "/api/v1/rooms/" + room.getId())
+                .build();
     }
 
     @GET
